@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Appointment } from '../models/appointment';
 import { FormsModule } from '@angular/forms';
+import { OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 @Component({
@@ -11,7 +12,12 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.css'
 })
-export class AppointmentListComponent {
+export class AppointmentListComponent implements OnInit {
+  
+  ngOnInit(): void {
+      let savedAppointments = localStorage.getItem("appointments")
+      this.appointments = savedAppointments ? JSON.parse(savedAppointments) : [] 
+  }
 
   newAppointmentTitle : string = "";
   newAppointmentDate : Date = new Date;
@@ -30,10 +36,15 @@ export class AppointmentListComponent {
 
       this.newAppointmentTitle="";
       this.newAppointmentDate=new Date;
+
+      localStorage.setItem("appointments",JSON.stringify(this.appointments))
     }
   }
 
   deleteAppointment(index : number){
     this.appointments.splice(index,1)
+
+    localStorage.setItem("appointments",JSON.stringify(this.appointments))
   }
+
 }
