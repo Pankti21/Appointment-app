@@ -1,20 +1,39 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Appointment } from '../models/appointment';
+import { FormsModule } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-appointment-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './appointment-list.component.html',
   styleUrl: './appointment-list.component.css'
 })
 export class AppointmentListComponent {
 
-  appointment : Appointment = {
-    id: 1,
-    title: "Walk",
-    date: new Date('2023-05-05')
+  newAppointmentTitle : string = "";
+  newAppointmentDate : Date = new Date;
+
+  appointments : Appointment[] = []
+
+  addAppointment(){
+    if(this.newAppointmentTitle.trim().length && this.newAppointmentDate){
+      let newAppointment : Appointment = {
+        id : Date.now(),
+        title : this.newAppointmentTitle,
+        date : this.newAppointmentDate
+      }
+
+      this.appointments.push(newAppointment);
+
+      this.newAppointmentTitle="";
+      this.newAppointmentDate=new Date;
+    }
   }
 
+  deleteAppointment(index : number){
+    this.appointments.splice(index,1)
+  }
 }
